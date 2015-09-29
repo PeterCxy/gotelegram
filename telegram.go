@@ -72,9 +72,9 @@ func (tg *Telegram) SetWebhook(url string) bool {
 // timeout: time to wait (seconds)
 func (tg *Telegram) GetUpdates(offset int, limit int, timeout int) []interface{} {
 	res := tg.post("getUpdates", map[string]string {
-		"offset": string(offset),
-		"limit": string(limit),
-		"timeout": string(timeout),
+		"offset": fmt.Sprintf("%d", offset),
+		"limit": fmt.Sprintf("%d", limit),
+		"timeout": fmt.Sprintf("%d", timeout),
 	})
 
 	if (res == nil) || (!res["ok"].(bool)) {
@@ -82,4 +82,31 @@ func (tg *Telegram) GetUpdates(offset int, limit int, timeout int) []interface{}
 	}
 
 	return res["result"].([]interface{})
+}
+
+// The Message object has too many fields, let's just use a map
+// Consult <https://core.telegram.org/bots/api#sendmessage> for a full list of params
+func (tg *Telegram) SendMessageRaw(msg map[string]string) bool {
+	res := tg.post("sendMessage", msg)
+
+	if res == nil {
+		return false
+	}
+
+	return res["ok"].(bool)
+}
+
+func (tg *Telegram) SendMessage(text string, chat int) bool {
+	return tg.SendMessageRaw(map[string]string {
+		"chat_id": fmt.Sprintf("%d", chat),
+		"text": text,
+	})
+}
+
+func (tg *Telegram) ReplyToMessage(id int, text string, chat int) bool {
+	return tg.SendMessageRaw(map[string]string {
+		"chat_id": fmt.Sprintf("%d", chat),
+		"text": text,
+		"reply_to_message_id": fmt.Sprintf("%d", id),
+	})
 }
