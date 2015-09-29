@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"fmt"
 	"testing"
+	"time"
 )
 
 func initialize() *Telegram {
@@ -39,6 +40,8 @@ func TestSendMessage(t *testing.T) {
 	} else {
 		tg := initialize()
 		uid := getUid()
+		fmt.Println(tg.SendChatAction("typing", uid))
+		time.Sleep(3000 * time.Millisecond)
 		fmt.Println(tg.SendMessage("tesuto", uid))
 	}
 }

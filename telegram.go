@@ -110,3 +110,17 @@ func (tg *Telegram) ReplyToMessage(id int, text string, chat int) bool {
 		"reply_to_message_id": fmt.Sprintf("%d", id),
 	})
 }
+
+// See <https://core.telegram.org/bots/api#sendchataction> for a list of actions
+func (tg *Telegram) SendChatAction(action string, chat int) bool {
+	res := tg.post("sendChatAction", map[string]string {
+		"chat_id": fmt.Sprintf("%d", chat),
+		"action": action,
+	})
+
+	if res == nil {
+		return false
+	}
+
+	return res["ok"].(bool)
+}
