@@ -22,6 +22,10 @@ func getUid() int {
 }
 
 func TestSetWebhook(*testing.T) {
+	if testing.Short() {
+		return
+	}
+
 	tg := initialize()
 
 	fmt.Println(tg.SetWebhook("https://google.com/"))
@@ -29,6 +33,9 @@ func TestSetWebhook(*testing.T) {
 }
 
 func TestGetUpdates(*testing.T) {
+	if testing.Short() {
+		return
+	}
 	tg := initialize()
 
 	fmt.Println(tg.GetUpdates(0, 100, 5))
@@ -43,5 +50,19 @@ func TestSendMessage(t *testing.T) {
 		fmt.Println(tg.SendChatAction("typing", uid))
 		time.Sleep(3000 * time.Millisecond)
 		fmt.Println(tg.SendMessage("tesuto", uid))
+	}
+}
+
+func TestParser(t *testing.T) {
+	printArray(ParseArgs("aaa bbb ccc ddd"))
+	printArray(ParseArgs("aaa 'bbb ccc' ddd"))
+	printArray(ParseArgs("\"aaa 'bbb\" ccc ddd"))
+	printArray(ParseArgs("aaa 'bbb ccc\" ddd'"))
+	printArray(ParseArgs("aaa  bbb"))
+}
+
+func printArray(arr []string) {
+	for _, t := range arr {
+		fmt.Println(t)
 	}
 }
