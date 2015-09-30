@@ -15,10 +15,10 @@ func initialize() *Telegram {
 	return New(k, true)
 }
 
-func getUid() int {
+func getUid() int64 {
 	b, _ := ioutil.ReadFile("./test_user.txt")
-	i, _ := strconv.ParseInt(strings.Trim(string(b), " \n"), 10, 32)
-	return int(i)
+	i, _ := strconv.ParseInt(strings.Trim(string(b), " \n"), 10, 64)
+	return i
 }
 
 func TestSetWebhook(*testing.T) {

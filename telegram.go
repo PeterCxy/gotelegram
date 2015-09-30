@@ -70,7 +70,7 @@ func (tg *Telegram) SetWebhook(url string) bool {
 }
 
 // timeout: time to wait (seconds)
-func (tg *Telegram) GetUpdates(offset int, limit int, timeout int) []interface{} {
+func (tg *Telegram) GetUpdates(offset int64, limit int, timeout int) []interface{} {
 	res := tg.post("getUpdates", map[string]string {
 		"offset": fmt.Sprintf("%d", offset),
 		"limit": fmt.Sprintf("%d", limit),
@@ -96,14 +96,14 @@ func (tg *Telegram) SendMessageRaw(msg map[string]string) bool {
 	return res["ok"].(bool)
 }
 
-func (tg *Telegram) SendMessage(text string, chat int) bool {
+func (tg *Telegram) SendMessage(text string, chat int64) bool {
 	return tg.SendMessageRaw(map[string]string {
 		"chat_id": fmt.Sprintf("%d", chat),
 		"text": text,
 	})
 }
 
-func (tg *Telegram) ReplyToMessage(id int, text string, chat int) bool {
+func (tg *Telegram) ReplyToMessage(id int64, text string, chat int64) bool {
 	return tg.SendMessageRaw(map[string]string {
 		"chat_id": fmt.Sprintf("%d", chat),
 		"text": text,
@@ -112,7 +112,7 @@ func (tg *Telegram) ReplyToMessage(id int, text string, chat int) bool {
 }
 
 // See <https://core.telegram.org/bots/api#sendchataction> for a list of actions
-func (tg *Telegram) SendChatAction(action string, chat int) bool {
+func (tg *Telegram) SendChatAction(action string, chat int64) bool {
 	res := tg.post("sendChatAction", map[string]string {
 		"chat_id": fmt.Sprintf("%d", chat),
 		"action": action,
