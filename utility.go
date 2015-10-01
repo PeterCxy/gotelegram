@@ -18,3 +18,11 @@ func (this TObject) MessageId() int64 {
 func (this TObject) ChatId() int64 {
 	return int64(this["chat"].(map[string]interface{})["id"].(float64))
 }
+
+func (this TObject) FromId() int64 {
+	return int64(this["from"].(map[string]interface{})["id"].(float64))
+}
+
+func (this TObject) From() TObject {
+	return TObject(this["from"].(map[string]interface{}))
+}
