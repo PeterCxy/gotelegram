@@ -23,6 +23,14 @@ func (this TObject) FromId() int64 {
 	return int64(this["from"].(map[string]interface{})["id"].(float64))
 }
 
+func (this TObject) ReplyToMessage() TObject {
+	return TObject(this["reply_to_message"].(map[string]interface{}))
+}
+
 func (this TObject) From() TObject {
 	return TObject(this["from"].(map[string]interface{}))
+}
+
+func (this TObject) Chat() TObject {
+	return TObject(this["chat"].(map[string]interface{}))
 }
