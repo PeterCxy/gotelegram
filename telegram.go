@@ -103,6 +103,14 @@ func (tg *Telegram) SendMessage(text string, chat int64) bool {
 	})
 }
 
+func (tg *Telegram) SendMessageNoPreview(text string, chat int64) bool {
+	return tg.SendMessageRaw(map[string]string {
+		"chat_id": fmt.Sprintf("%d", chat),
+		"text": text,
+		"disable_web_page_preview": "true",
+	})
+}
+
 func (tg *Telegram) ReplyToMessage(id int64, text string, chat int64) bool {
 	return tg.SendMessageRaw(map[string]string {
 		"chat_id": fmt.Sprintf("%d", chat),
