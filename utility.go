@@ -34,3 +34,8 @@ func (this TObject) From() TObject {
 func (this TObject) Chat() TObject {
 	return TObject(this["chat"].(map[string]interface{}))
 }
+
+// Whether a 'Chat' object is a group
+func (this TObject) IsGroup() bool {
+	return this["title"] != nil
+}
