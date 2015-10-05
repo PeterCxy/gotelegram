@@ -132,3 +132,22 @@ func (tg *Telegram) SendChatAction(action string, chat int64) bool {
 
 	return res["ok"].(bool)
 }
+
+// The map should contain a key "@photo" and its value should be path to the photo
+// I recommend using a temp file.
+func (tg *Telegram) SendPhotoRaw(msg map[string]string) bool {
+	res := tg.post("sendPhoto", msg)
+
+	if res == nil {
+		return false
+	}
+
+	return res["ok"].(bool)
+}
+
+func (tg *Telegram) SendPhoto(file string, chat int64) bool {
+	return tg.SendPhotoRaw(map[string]string {
+		"chat_id": fmt.Sprintf("%d", chat),
+		"@photo": file,
+	})
+}
