@@ -1,10 +1,10 @@
 package telegram
 
 import (
-	"io/ioutil"
-	"strings"
-	"strconv"
 	"fmt"
+	"io/ioutil"
+	"strconv"
+	"strings"
 	"testing"
 	"time"
 )

@@ -2,8 +2,8 @@
 package telegram
 
 import (
-	"fmt"
 	"encoding/json"
+	"fmt"
 
 	"github.com/ddliu/go-httpclient"
 )
@@ -14,13 +14,13 @@ const FileUrl = "https://api.telegram.org/file/bot%s/%s"
 
 type Telegram struct {
 	apiKey string
-	debug bool
+	debug  bool
 }
 
 func New(key string, debug bool) *Telegram {
-	return &Telegram {
+	return &Telegram{
 		apiKey: key,
-		debug: debug,
+		debug:  debug,
 	}
 }
 
@@ -59,7 +59,7 @@ func (tg *Telegram) post(method string, params map[string]string) map[string]int
 }
 
 func (tg *Telegram) SetWebhook(url string) bool {
-	res := tg.post("setWebhook", map[string]string {
+	res := tg.post("setWebhook", map[string]string{
 		"url": url,
 	})
 
@@ -72,9 +72,9 @@ func (tg *Telegram) SetWebhook(url string) bool {
 
 // timeout: time to wait (seconds)
 func (tg *Telegram) GetUpdates(offset int64, limit int, timeout int) []interface{} {
-	res := tg.post("getUpdates", map[string]string {
-		"offset": fmt.Sprintf("%d", offset),
-		"limit": fmt.Sprintf("%d", limit),
+	res := tg.post("getUpdates", map[string]string{
+		"offset":  fmt.Sprintf("%d", offset),
+		"limit":   fmt.Sprintf("%d", limit),
 		"timeout": fmt.Sprintf("%d", timeout),
 	})
 
@@ -88,14 +88,14 @@ func (tg *Telegram) GetUpdates(offset int64, limit int, timeout int) []interface
 // Get the File object for <id>.
 // Including file path.
 func (tg *Telegram) GetFile(id string) TObject {
-	res := tg.post("getFile", map[string]string {
+	res := tg.post("getFile", map[string]string{
 		"file_id": id,
 	})
-	
+
 	if (res == nil) || (!res["ok"].(bool)) {
 		return nil
 	}
-	
+
 	return TObject(res["result"].(map[string]interface{}))
 }
 
@@ -118,33 +118,33 @@ func (tg *Telegram) SendMessageRaw(msg map[string]string) bool {
 }
 
 func (tg *Telegram) SendMessage(text string, chat int64) bool {
-	return tg.SendMessageRaw(map[string]string {
+	return tg.SendMessageRaw(map[string]string{
 		"chat_id": fmt.Sprintf("%d", chat),
-		"text": text,
+		"text":    text,
 	})
 }
 
 func (tg *Telegram) SendMessageNoPreview(text string, chat int64) bool {
-	return tg.SendMessageRaw(map[string]string {
+	return tg.SendMessageRaw(map[string]string{
 		"chat_id": fmt.Sprintf("%d", chat),
-		"text": text,
+		"text":    text,
 		"disable_web_page_preview": "true",
 	})
 }
 
 func (tg *Telegram) ReplyToMessage(id int64, text string, chat int64) bool {
-	return tg.SendMessageRaw(map[string]string {
-		"chat_id": fmt.Sprintf("%d", chat),
-		"text": text,
+	return tg.SendMessageRaw(map[string]string{
+		"chat_id":             fmt.Sprintf("%d", chat),
+		"text":                text,
 		"reply_to_message_id": fmt.Sprintf("%d", id),
 	})
 }
 
 // See <https://core.telegram.org/bots/api#sendchataction> for a list of actions
 func (tg *Telegram) SendChatAction(action string, chat int64) bool {
-	res := tg.post("sendChatAction", map[string]string {
+	res := tg.post("sendChatAction", map[string]string{
 		"chat_id": fmt.Sprintf("%d", chat),
-		"action": action,
+		"action":  action,
 	})
 
 	if res == nil {
@@ -167,8 +167,8 @@ func (tg *Telegram) SendPhotoRaw(msg map[string]string) bool {
 }
 
 func (tg *Telegram) SendPhoto(file string, chat int64) bool {
-	return tg.SendPhotoRaw(map[string]string {
+	return tg.SendPhotoRaw(map[string]string{
 		"chat_id": fmt.Sprintf("%d", chat),
-		"@photo": file,
+		"@photo":  file,
 	})
 }

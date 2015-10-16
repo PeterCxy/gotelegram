@@ -46,14 +46,14 @@ func (this TObject) Photo() []TObject {
 	if this["photo"] == nil {
 		return nil
 	}
-	
+
 	photos := this["photo"].([]interface{})
 	r := make([]TObject, len(photos))
-	
+
 	for i, p := range photos {
 		r[i] = TObject(p.(map[string]interface{}))
 	}
-	
+
 	return r
 }
 
