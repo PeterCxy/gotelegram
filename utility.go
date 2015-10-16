@@ -39,3 +39,31 @@ func (this TObject) Chat() TObject {
 func (this TObject) IsGroup() bool {
 	return this["title"] != nil
 }
+
+// Get photos from the message.
+// If no photo found, nil will be returned.
+func (this TObject) Photo() []TObject {
+	if this["photo"] == nil {
+		return nil
+	}
+	
+	photos := this["photo"].([]interface{})
+	r := make([]TObject, len(photos))
+	
+	for i, p := range photos {
+		r[i] = TObject(p.(map[string]interface{}))
+	}
+	
+	return r
+}
+
+// Get file path from a File object.
+// Call Telegram.PathToUrl() to convert to a downloadable url.
+func (this TObject) FilePath() string {
+	return this["file_path"].(string)
+}
+
+// Get file id from a File or Photo object
+func (this TObject) FileId() string {
+	return this["file_id"].(string)
+}

@@ -10,6 +10,7 @@ import (
 
 // https://api.telegram.org/bot<token>/METHOD_NAME
 const MethodUrl = "https://api.telegram.org/bot%s/%s"
+const FileUrl = "https://api.telegram.org/file/bot%s/%s"
 
 type Telegram struct {
 	apiKey string
@@ -82,6 +83,26 @@ func (tg *Telegram) GetUpdates(offset int64, limit int, timeout int) []interface
 	}
 
 	return res["result"].([]interface{})
+}
+
+// Get the File object for <id>.
+// Including file path.
+func (tg *Telegram) GetFile(id string) TObject {
+	res := tg.post("getFile", map[string]string {
+		"file_id": id,
+	})
+	
+	if (res == nil) || (!res["ok"].(bool)) {
+		return nil
+	}
+	
+	return TObject(res["result"].(map[string]interface{}))
+}
+
+// File Path to File URL.
+// https://api.telegram.org/file/bot<token>/<file_path>
+func (tg *Telegram) PathToUrl(path string) string {
+	return fmt.Sprintf(FileUrl, tg.apiKey, path)
 }
 
 // The Message object has too many fields, let's just use a map
