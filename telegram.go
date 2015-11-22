@@ -4,6 +4,7 @@ package telegram
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/ddliu/go-httpclient"
 )
@@ -132,6 +133,16 @@ func (tg *Telegram) SendMessageNoPreview(text string, chat int64) bool {
 	})
 }
 
+// Send a message to a Channel
+func (tg *Telegram) SendMessageChan(text string, chat string) bool {
+	return tg.SendMessageRaw(map[string]string{
+		"chat_id":    "@" + chat,
+		"parse_mode": "Markdown",
+		"text":       text,
+		"disable_web_page_preview": "true",
+	})
+}
+
 func (tg *Telegram) ReplyToMessage(id int64, text string, chat int64) bool {
 	return tg.SendMessageRaw(map[string]string{
 		"chat_id":             fmt.Sprintf("%d", chat),
@@ -171,4 +182,27 @@ func (tg *Telegram) SendPhoto(file string, chat int64) bool {
 		"chat_id": fmt.Sprintf("%d", chat),
 		"@photo":  file,
 	})
+}
+
+// Send a photo to a channel
+func (tg *Telegram) SendPhotoChan(file string, chat string) bool {
+	return tg.SendPhotoRaw(map[string]string{
+		"chat_id": "@" + chat,
+		"@photo":  file,
+	})
+}
+
+// Escape a string for using in Markdown
+const markdownKeywords = "_*<>[](){}-"
+
+func Escape(str string) (ret string) {
+	for _, runeValue := range str {
+		if strings.Contains(markdownKeywords, string(runeValue)) {
+			ret += fmt.Sprintf("\\%s", string(runeValue))
+		} else {
+			ret += string(runeValue)
+		}
+	}
+
+	return
 }
